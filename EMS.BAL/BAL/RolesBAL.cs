@@ -32,9 +32,4 @@ public class RolesBAL : IRolesBAL
     {
         return _rolesDAL.AddRole(role);
     }
-
-    public bool UpdateRoles(List<Role> roles)
-    {
-        return _rolesDAL.UpdateRoles(roles);
-    }
 }

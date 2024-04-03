@@ -114,8 +114,9 @@ public class RolesDAL : IRolesDAL
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "INSERT INTO Role (Name) VALUES (@RoleName)";
+                string query = "INSERT INTO Role (DepartmentId, Name) VALUES (@DepartmentId, @RoleName)";
                 SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@DepartmentId", role.DepartmentId);
                 command.Parameters.AddWithValue("@RoleName", role.Name);
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected > 0;
@@ -126,34 +127,4 @@ public class RolesDAL : IRolesDAL
             return false;
         }
     }
-
-    public bool UpdateRoles(List<Role> roles)
-    {
-        try
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                foreach (var role in roles)
-                {
-                    string query = "UPDATE Role SET Name = @RoleName WHERE Id = @RoleId";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@RoleName", role.Name);
-                    command.Parameters.AddWithValue("@RoleId", role.Id);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    if (rowsAffected == 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-            
-            return true;
-        }
-        catch 
-        {
-            return false;
-        }
-    }
-
 }

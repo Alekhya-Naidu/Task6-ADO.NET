@@ -9,5 +9,4 @@ public interface IRolesBAL
     Role GetRoleFromName(string roleInput);
     Role GetRoleById(int roleId);
     bool AddRole(Role role);
-    bool UpdateRoles(List<Role> roles);
 }

@@ -113,8 +113,14 @@ public static class Program
             }
             else
             {
-                AddOrUpdateRole(option.DepartmentId, option.RoleName);
-                _console.PrintSuccess("Added role "+option.RoleName+" to department");
+                if(AddOrUpdateRole(option.DepartmentId, option.RoleName))
+                {
+                    _console.PrintSuccess("Added role "+option.RoleName+" to department");
+                }
+                else
+                {
+                    _console.PrintError("Cannot add roles");
+                }
             }
         }
         catch (Exception ex)
@@ -223,7 +229,7 @@ public static class Program
         {
             _console.PrintMsg(r.Name);
         }
-        string roleInput = Console.ReadLine()?.Trim();
+        string roleInput = Console.ReadLine()?.Trim().ToLower();
         Role role = roles.FirstOrDefault(r => r.Name.ToLower() == roleInput);
         if (role == null)
         {
@@ -432,7 +438,7 @@ public static class Program
         {
             _console.PrintMsg(r.Name);
         }
-        string roleInput = Console.ReadLine()?.Trim();
+        string roleInput = Console.ReadLine()?.Trim().ToLower();
         Role role = roles.FirstOrDefault(r => r.Name.ToLower() == roleInput);
         if (role == null)
         {
@@ -519,18 +525,24 @@ public static class Program
             var department = _masterDataBAL.GetDepartmentById(departmentId); 
             if (department == null)
             {
+                _console.PrintMsg("null dept");
                 return false;
             }
             List<Role> roles = _rolesBAL.GetAllRoles();
             int roleId = roles.Count + 1; 
+            _console.PrintMsg("rolw id : "+ roleId);
             Role role = new Role
             {
                 Id = roleId,
                 Name = roleName,
                 DepartmentId = departmentId
             };
+            _console.PrintMsg("adding role");
             roles.Add(role);
-            _rolesBAL.UpdateRoles(roles);
+
+            _console.PrintMsg("exited role");
+            _rolesBAL.AddRole(role);
+            _console.PrintMsg("updated role");
             return true;
         }
         catch
